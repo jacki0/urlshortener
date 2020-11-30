@@ -3,25 +3,29 @@ import requests
 import random
 import string
 
-def is_valid(message):
-    if  message[:4] != 'http':        
-        message = 'http://' + message
-    elif message[:8] == 'https://':
-        message.replace(message[5], '')
+
+sample = string.ascii_lowercase + string.digits
+
+
+def is_valid(orig_url):
+    if  orig_url[:4] != 'http':        
+        orig_url = 'http://' + orig_url
+    elif orig_url[:8] == 'https://':
+        orig_url.replace(orig_url[5], '')
     try:
-        print(message)
-        urllib.request.urlopen(message)              # проверка валидности ссылки
-        return message[message.index('/') + 2 :]
+        urllib.request.urlopen(orig_url)
+        return orig_url[orig_url.index('/') + 2 :]
     except Exception:
         return False
 
+
 def reduce(message):
-    message = is_valid(message)
-    if message == False:
+    orig_url = is_valid(message)
+    if not orig_url:
         return 'Ваша ссылка некорректна'
-    elif message.index('.') >= 3:
-        message = message[:3]
+    elif orig_url.index('.') >= 3:
+        reduced_url = orig_url[:3]
     else:
-        message = message[:message.index('.')]
-    message = message + ''.join(random.sample(string.ascii_lowercase + string.digits, random.randint(1, 2)))
-    return 'redurl.xyz/' + message
+        reduced_url = orig_url[:orig_url.index('.')]
+    reduced_url = 'redurl.xyz/' + reduced_url + ''.join(random.sample(sample, random.randint(1, 2)))
+    return reduced_url
