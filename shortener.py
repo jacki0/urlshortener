@@ -54,4 +54,3 @@ def insert_url(message):
             return collection.insert_one(url).inserted_id
         except Exception as e:
             return e
-print(insert_url('vk.com/id1'))
