@@ -1,18 +1,22 @@
 from pymongo import MongoClient
+import datetime
 import requests
 import random
 import urllib
 import string
 import json
 
+
 with open('config.json') as file:
     config = json.load(file)
     host = config['host']
     port = config['port']
 
+sample = string.ascii_lowercase + string.digits
 
 client = MongoClient(host, port)
-sample = string.ascii_lowercase + string.digits
+db = client.urls_db
+collection = db.urls
 
 
 def is_valid(orig_url):
@@ -37,3 +41,9 @@ def reduce(message):
         reduced_url = orig_url[:orig_url.index('.')]
     reduced_url = 'redurl.xyz/' + reduced_url + ''.join(random.sample(sample, random.randint(1, 2)))
     return reduced_url
+
+
+url = {"orig_url": message,
+          "reduced_url": reduce(message),
+          "date": str(datetime.datetime.now())[:-7]}
+url_id = collection.insert_one(url).inserted_id
