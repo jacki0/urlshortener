@@ -13,7 +13,6 @@ with open('config.json') as file:
     port = config['port']
 
 sample = string.ascii_lowercase + string.digits
-
 client = MongoClient(host, port)
 db = client.urls_db
 collection = db.urls
@@ -43,7 +42,11 @@ def reduce(message):
     return reduced_url
 
 
-url = {"orig_url": message,
-          "reduced_url": reduce(message),
-          "date": str(datetime.datetime.now())[:-7]}
-url_id = collection.insert_one(url).inserted_id
+def insert_url(message):
+    url = {"orig_url": message,
+              "reduced_url": reduce(message),
+              "date": str(datetime.datetime.now())[:-7]}
+    try:
+        return collection.insert_one(url).inserted_id
+    except Exception as e:
+        return e
