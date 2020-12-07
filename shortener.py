@@ -26,14 +26,14 @@ def is_valid(orig_url):
     try:
         urllib.request.urlopen(orig_url)
         return orig_url[orig_url.index('/') + 2 :]
-    except Exception:
-        return False
+    except Exception as e:
+        return e
 
 
 def reduce(message):
     orig_url = is_valid(message)
-    if not orig_url:
-        return 'Ваша ссылка некорректна'
+    if  type(orig_url) is not str:
+        return orig_url
     elif orig_url.index('.') >= 3:
         reduced_url = orig_url[:3]
     else:
@@ -43,10 +43,15 @@ def reduce(message):
 
 
 def insert_url(message):
-    url = {"orig_url": message,
-              "reduced_url": reduce(message),
-              "date": str(datetime.datetime.now())[:-7]}
-    try:
-        return collection.insert_one(url).inserted_id
-    except Exception as e:
-        return e
+    reduced_url = reduce(message)
+    if type(reduced_url) is not str:
+        return reduced_url
+    else:
+        url = {"orig_url": message,
+                  "reduced_url": reduced_url,
+                  "date": str(datetime.datetime.now())[:-7]}
+        try:
+            return collection.insert_one(url).inserted_id
+        except Exception as e:
+            return e
+print(insert_url('vk.com/id1'))
