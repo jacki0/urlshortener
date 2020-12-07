@@ -1,9 +1,17 @@
-import urllib
+from pymongo import MongoClient
 import requests
 import random
+import urllib
 import string
+import json
+
+with open('config.json') as file:
+    config = json.load(file)
+    host = config['host']
+    port = config['port']
 
 
+client = MongoClient(host, port)
 sample = string.ascii_lowercase + string.digits
 
 
