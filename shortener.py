@@ -54,3 +54,12 @@ def insert_url(message):
             return collection.insert_one(url).inserted_id
         except Exception as e:
             return e
+
+
+def run(message):
+    result = insert_url(message)
+    if type(result) is str:
+        log = {'insert_id' : [str(result), str(datetime.datetime.now())[:-7]]}
+    else:
+        log = {'exeption' : [str(result), str(datetime.datetime.now())[:-7]]}
+    json.dump(log, open('log.json', 'a'), indent=0)
