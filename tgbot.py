@@ -2,7 +2,6 @@ from shortener import run
 import telebot
 import json
 
-
 with open('config.json') as file:
     config = json.load(file)
     key = config['bot_key']
@@ -10,14 +9,16 @@ with open('config.json') as file:
 bot = telebot.TeleBot(key)
 
 
-@bot.message_handler(commands = ['start'])
+@bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, "С помощью этого бота можно сократить вашу ссылку. \
     \nОтправьте любую ссылку, в ответ на сообщение бот вернёт короткую ссылку с переадресацией на оригинальный адрес.")
 
-@bot.message_handler(content_types = ['text'])
-def askaction(message):
-    result = run(message)
+
+@bot.message_handler(content_types=['text'])
+def action(message):
+    result = run(message.text)
     bot.send_message(message.chat.id, result)
+
 
 bot.polling()
