@@ -27,7 +27,7 @@ def is_valid(orig_url):
         urllib.request.urlopen(orig_url)
         return orig_url[orig_url.index('/') + 2 :]
     except Exception as e:
-        return e
+        return orig_url, e
 
 
 def reduce(message):
@@ -51,15 +51,16 @@ def insert_url(message):
                   "reduced_url": reduced_url,
                   "date": str(datetime.datetime.now())[:-7]}
         try:
-            return collection.insert_one(url).inserted_id
+            return reduced_url, collection.insert_one(url).inserted_id
         except Exception as e:
-            return e
+            return reduced_url, e
 
 
 def run(message):
     result = insert_url(message)
-    if type(result) is str:
-        log = {'insert_id' : [str(result), str(datetime.datetime.now())[:-7]]}
+    if type(result[1]) is str:
+        log = {'insert_id' : [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
     else:
-        log = {'exeption' : [str(result), str(datetime.datetime.now())[:-7]]}
+        log = {'exeption' : [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
     json.dump(log, open('log.json', 'a'), indent=0)
+    return result[0]
