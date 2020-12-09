@@ -1,0 +1,4 @@
+telebot
+PyTelegramBotAPI
+requests
+pymongo
