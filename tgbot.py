@@ -21,9 +21,4 @@ def action(message):
     bot.send_message(message.chat.id, result)
 
 
-if __name__ == '__main__':
-    main()
-
-
 bot.polling()
-

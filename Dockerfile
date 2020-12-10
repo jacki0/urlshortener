@@ -1,12 +1,10 @@
 
-FROM python:3
+FROM python:3.7
 
-WORKDIR /app
+WORKDIR /
 
-ADD . /app
-
-RUN pip install --upgrade pip
+ADD . /
 
 RUN pip3 install -r requirements.txt
 
-CMD [ "/usr/bin/python3", "app/tgbot.py" ]
+RUN python3 tgbot.py
