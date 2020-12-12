@@ -1,8 +1,7 @@
+from urllib.request import urlopen, Request
 from pymongo import MongoClient
 import datetime
-import requests
 import random
-import urllib
 import string
 import json
 
@@ -22,8 +21,11 @@ def is_valid(orig_url):
         orig_url = 'http://' + orig_url
     elif orig_url[:8] == 'https://':
         orig_url.replace(orig_url[5], '')
+    if orig_url[-1] == '/':
+        orig_url = orig_url[:-1]
+    req = Request(orig_url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
-        urllib.request.urlopen(orig_url)
+        urlopen(req).read()
         return orig_url[orig_url.index('/') + 2 :]
     except Exception as e:
         return orig_url, e
