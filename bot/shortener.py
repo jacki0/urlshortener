@@ -65,17 +65,26 @@ def insert_url(message):
         return e
 
 
+def is_databased(col, uurl):
+    for i in collection.find({col: uurl}):
+        return i
+
+
 def run(message):
-    result = insert_url(message)
-    if type(result) is not tuple:
-        log = {'exeption': [message, str(result), str(datetime.datetime.now())[:-7]]}
-        result = 'Что-то пошло не так.\nПопробуйте снова.'
-    elif len(result) == 2 and 'ObjectId' in str(type(result[1])):
-        print(result)
-        log = {'insert_id': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
-        result = result[0]
-    elif len(result) == 3:
-        log = {'insert_id': [message, str(result[1]), str(result[1]), str(datetime.datetime.now())[:-7]]}
-        result = [result[0], 'Ошибка проверки ссылки: ' + str(result[2]) + '. Проверьте корректность.']
-    json.dump(log, open('log.json', 'a'), indent=0)
+    in_db = is_databased("orig_url", message)
+    if in_db is not None:
+        result = in_db["reduced_url"]
+    else:
+        result = insert_url(message)
+        if type(result) is not tuple:
+            log = {'exeption': [message, str(result), str(datetime.datetime.now())[:-7]]}
+            result = 'Что-то пошло не так.\nПопробуйте снова.'
+        elif len(result) == 2 and 'ObjectId' in str(type(result[1])):
+            print(result)
+            log = {'insert_id': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
+            result = result[0]
+        elif len(result) == 3:
+            log = {'insert_id': [message, str(result[1]), str(result[1]), str(datetime.datetime.now())[:-7]]}
+            result = [result[0], 'Ошибка проверки ссылки: ' + str(result[2]) + '. Проверьте корректность.']
+        json.dump(log, open('log.json', 'a'), indent=0)
     return result
