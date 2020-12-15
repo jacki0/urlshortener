@@ -29,40 +29,53 @@ def is_valid(orig_url):
         urlopen(req).read()
         return orig_url[orig_url.index('/') + 2 :]
     except Exception as e:
-        return orig_url, e
+        return orig_url[orig_url.index('/') + 2 :], e
 
 
 def reduce(message):
     orig_url = is_valid(message)
     if type(orig_url) is not str:
-        return orig_url
-    elif orig_url.index('.') >= 3:
+        ex = orig_url[1]
+        orig_url = orig_url[0]
+    if orig_url.index('.') >= 3:
         reduced_url = orig_url[:3]
     else:
         reduced_url = orig_url[:orig_url.index('.')]
     reduced_url = 'redurl.xyz/' + reduced_url + ''.join(random.sample(sample, random.randint(1, 2)))
-    return reduced_url
+    try:
+        ex
+        return reduced_url, ex
+    except NameError:
+        return reduced_url
 
 
 def insert_url(message):
     reduced_url = reduce(message)
     if type(reduced_url) is not str:
-        return reduced_url
-    else:
-        url = {"orig_url": message,
-               "reduced_url": reduced_url,
-               "date": str(datetime.datetime.now())[:-7]}
+        ex = reduced_url[1]
+        reduced_url = reduced_url[0]
+    url = {"orig_url": message, "reduced_url": reduced_url, "date": str(datetime.datetime.now())[:-7]}
+    try:
         try:
+            ex
+            return reduced_url, collection.insert_one(url).inserted_id, ex
+        except NameError:
             return reduced_url, collection.insert_one(url).inserted_id
-        except Exception as e:
-            return reduced_url, e
+    except Exception as e:
+        return e
 
 
 def run(message):
     result = insert_url(message)
-    if  'ObjectId' in str(type(result[1])):
+    if type(result) is not tuple:
+        log = {'exeption': [message, str(result), str(datetime.datetime.now())[:-7]]}
+        result = 'Что-то пошло не так.\nПопробуйте снова.'
+    elif len(result) == 2 and 'ObjectId' in str(type(result[1])):
+        print(result)
         log = {'insert_id': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
-    else:
+        result = result[0]
+    elif len(result) == 3:
         log = {'exeption': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
+        result = [result[0], 'Ошибка проверки ссылки: ' + str(result[2]) + '. Проверьте корректность.']
     json.dump(log, open('log.json', 'a'), indent=0)
-    return result[0]
+    return result
