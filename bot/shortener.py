@@ -5,7 +5,8 @@ import random
 import string
 import json
 
-with open('config.json') as file:
+
+with open('bot/config.json') as file:
     config = json.load(file)
     host = config['host']
     port = config['port']
@@ -59,7 +60,7 @@ def insert_url(message):
 
 def run(message):
     result = insert_url(message)
-    if type(result[1]) is str:
+    if  'ObjectId' in str(type(result[1])):
         log = {'insert_id': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
     else:
         log = {'exeption': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
