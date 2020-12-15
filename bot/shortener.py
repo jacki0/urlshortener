@@ -42,6 +42,13 @@ def reduce(message):
     else:
         reduced_url = orig_url[:orig_url.index('.')]
     reduced_url = 'redurl.xyz/' + reduced_url + ''.join(random.sample(sample, random.randint(1, 2)))
+    i = False
+    while i == False:
+        in_db = is_databased("reduced_url", reduced_url)
+        if in_db is None:
+            i = True
+        else:
+            reduced_url = reduced_url[:random.randint(1, 2)] + ''.join(random.sample(sample, random.randint(1, 2)))
     try:
         ex
         return reduced_url, ex
