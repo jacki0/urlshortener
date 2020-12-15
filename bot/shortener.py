@@ -75,7 +75,7 @@ def run(message):
         log = {'insert_id': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
         result = result[0]
     elif len(result) == 3:
-        log = {'exeption': [message, str(result[1]), str(datetime.datetime.now())[:-7]]}
+        log = {'insert_id': [message, str(result[1]), str(result[1]), str(datetime.datetime.now())[:-7]]}
         result = [result[0], 'Ошибка проверки ссылки: ' + str(result[2]) + '. Проверьте корректность.']
     json.dump(log, open('log.json', 'a'), indent=0)
     return result
