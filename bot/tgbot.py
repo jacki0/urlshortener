@@ -18,10 +18,8 @@ def start_message(message):
 @bot.message_handler(content_types=['text'])
 def action(message):
     result = run(message.text)
-    print(type(result))
     if type(result) is list:
         result = result[0] + '\n' + result[1]
-    print(result)
     bot.send_message(message.chat.id, result)
 
 

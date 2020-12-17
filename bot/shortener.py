@@ -95,3 +95,7 @@ def run(message):
             result = [result[0], 'Ошибка проверки ссылки: ' + str(result[2]) + '. Проверьте корректность.']
         json.dump(log, open('log.json', 'a'), indent=0)
     return result
+
+def return_url(user_url):
+    res_url = is_databased('reduced_url', user_url)
+    return res_url["orig_url"]
