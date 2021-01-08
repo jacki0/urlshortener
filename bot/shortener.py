@@ -6,7 +6,7 @@ import string
 import json
 
 
-with open('bot/config.json') as file:
+with open('config.json') as file:
     config = json.load(file)
     host = config['db_host']
     port = config['db_port']
