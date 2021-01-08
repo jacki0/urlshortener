@@ -8,11 +8,13 @@ import json
 
 with open('bot/config.json') as file:
     config = json.load(file)
-    host = config['host']
-    port = config['port']
+    host = config['db_host']
+    port = config['db_port']
+    user = config['db_user']
+    password = config['db_pwd']
 
 sample = string.ascii_lowercase + string.digits
-client = MongoClient(host, port)
+client = MongoClient(f'mongodb://{user}:{password}@{host}:{port}/urls_db')
 db = client.urls_db
 collection = db.urls
 
