@@ -1,6 +1,6 @@
 import sys
 sys.path.append(".")
-from bot.shortener import return_url
+from shortener.shortener import return_url
 from flask import Flask, request, render_template, redirect
 
 

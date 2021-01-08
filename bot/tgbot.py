@@ -1,4 +1,4 @@
-from shortener import run
+from shortener.shortener import run
 import telebot
 import json
 

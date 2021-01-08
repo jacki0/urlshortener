@@ -3,6 +3,6 @@ version: '3'
 services:
   bot:
     build:
-      context: ./bot
+      context: ./
       dockerfile: Dockerfile
-    command: python3 tgbot.py
+    command: python3 bot/tgbot.py

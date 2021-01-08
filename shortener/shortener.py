@@ -45,7 +45,7 @@ def reduce(message):
         reduced_url = orig_url[:orig_url.index('.')]
     reduced_url = 'redurl.xyz/' + reduced_url + ''.join(random.sample(sample, random.randint(1, 2)))
     i = False
-    while i == False:
+    while not i:
         in_db = is_databased("reduced_url", reduced_url)
         if in_db is None:
             i = True
@@ -86,7 +86,7 @@ def run(message):
     else:
         result = insert_url(message)
         if type(result) is not tuple:
-            log = {'exeption': [message, str(result), str(datetime.datetime.now())[:-7]]}
+            log = {'exception': [message, str(result), str(datetime.datetime.now())[:-7]]}
             result = 'Что-то пошло не так.\nПопробуйте снова.'
         elif len(result) == 2 and 'ObjectId' in str(type(result[1])):
             print(result)
