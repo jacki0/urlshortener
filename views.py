@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect
 from shortener import return_url
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 
 def bad_request(message):
@@ -16,7 +16,7 @@ def bad_request(message):
     response.status_code = 400
     return response
 
-@app.route('/<alias>', methods=['GET'])
+@application.route('/<alias>', methods=['GET'])
 def get_shortened(alias):
     """GET endpoint that takes an alias (shortened url) and redirects if successfull.
     Otherwise returns a bad request.
@@ -33,4 +33,4 @@ def get_shortened(alias):
         return redirect(url, code=302)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)

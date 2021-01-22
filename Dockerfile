@@ -7,4 +7,4 @@ ADD . /
 
 RUN pip3 install -r requirements.txt
 
-RUN chmod +x app/tgbot.py
+RUN chmod +x tgbot.py
