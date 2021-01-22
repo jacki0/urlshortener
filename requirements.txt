@@ -2,3 +2,5 @@ requests
 pymongo
 telebot
 PyTelegramBotAPI
+flask
+gunicorn
