@@ -1,7 +1,5 @@
-import sys
-sys.path.append(".")
-from shortener.shortener import return_url
 from flask import Flask, request, render_template, redirect
+from shortener import return_url
 
 
 app = Flask(__name__)
